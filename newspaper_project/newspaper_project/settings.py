@@ -133,3 +133,6 @@ LOGOUT_REDIRECT_URL = 'home'
 
 # connect bootstrap
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+# local email_password_reset
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
