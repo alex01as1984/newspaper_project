@@ -19,7 +19,7 @@ class ArticleDetailView(LoginRequiredMixin, DetailView):
     template_name = 'article_detail.html'
     login_url = 'login' # new mixin
 
-class ArticleUpdateView(LoginRequiredMixin, UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
     fields = ('title', 'body')
     template_name = 'article_edit.html'
@@ -29,7 +29,7 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
         obj = self.get_object()
         return obj.author == self.request.user
 
-class ArticleDeleteView(LoginRequiredMixin, DeleteView):
+class ArticleDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Article
     template_name = 'article_delete.html'
     success_url = reverse_lazy('article_list')
@@ -45,6 +45,6 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     fields = ('title', 'body',)
     login_url = 'login'     # new mixin
 
-    def form_valid(self, form):     #new
-        form.instance.authot = self.request.user
+    def form_valid(self, form):
+        form.instance.author = self.request.user
         return super().form_valid(form)
