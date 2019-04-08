@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     # apps 
     'users.apps.UsersConfig',       # new app users
     'pages.apps.PagesConfig',       # new2 app pages
+    'articles.apps.ArticlesConfig', # new 4
 ]
 
 MIDDLEWARE = [

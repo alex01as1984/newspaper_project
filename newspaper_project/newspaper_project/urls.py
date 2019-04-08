@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls')),                  # new1 app users
     path('users/', include('django.contrib.auth.urls')),    # new1 users inside app django
+    path('articles/', include('articles.urls')),            # new4 app 
    # path('', TemplateView.as_view(template_name='home.html'), name='home' ), # new1 first page old new2
     path('', include('pages.urls')),                         # new 2 app pages
 ]
