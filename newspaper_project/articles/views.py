@@ -1,30 +1,50 @@
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin  # new только автор может менять свои данные
+
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin   # new
 
 from .models import Article
 
 # Create your views here.
 
-class ArticleListView(ListView):
+class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
     template_name = 'article_list.html'
+    login_url = 'login' # new mixin
 
-class ArticleDetailView(DetailView):
+class ArticleDetailView(LoginRequiredMixin, DetailView):
     model = Article
     template_name = 'article_detail.html'
+    login_url = 'login' # new mixin
 
-class ArticleUpdateView(UpdateView):
+class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
     fields = ('title', 'body')
     template_name = 'article_edit.html'
+    login_url = 'login' # new mixin
 
-class ArticleDeleteView(DeleteView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+class ArticleDeleteView(LoginRequiredMixin, DeleteView):
     model = Article
     template_name = 'article_delete.html'
     success_url = reverse_lazy('article_list')
+    login_url = 'login' # new mixin
 
-class ArticleCreateView(CreateView):
+    def test_func(self):
+        obj = self.get_object()
+        return obj.author == self.request.user
+
+class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     template_name = 'article_new.html'
-    fields = ('title', 'body', 'author',)
+    fields = ('title', 'body',)
+    login_url = 'login'     # new mixin
+
+    def form_valid(self, form):     #new
+        form.instance.authot = self.request.user
+        return super().form_valid(form)
